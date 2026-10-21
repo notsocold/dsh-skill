@@ -1,0 +1,12 @@
+# dsh-skill bundle patch: mount the Host half in the profile.
+#
+# The Host plugin owns the skill library service, the per-Agent `ctx.skills`
+# provider and the authenticated `/api/dsh-skill/*` routes the browser half
+# calls. Its `dsh.client` declaration in package.json makes the Web module
+# system serve `client.js` as the browser plugin (Skills settings page +
+# composer session selector). No preset or profile patch is required: the
+# provider registers into each live Agent's scope from the Host plane.
+
+- insert:
+    - id: dsh-skill
+      name: '@local/dsh-skill'

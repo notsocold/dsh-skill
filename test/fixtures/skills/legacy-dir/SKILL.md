@@ -1,0 +1,3 @@
+# Legacy
+
+No frontmatter here.

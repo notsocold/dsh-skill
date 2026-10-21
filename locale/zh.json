@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "技能库",
+    "description": "把 Claude Code 与 Codex 生态的 Agent 技能集中导入为一个可视技能库，并按会话选择可用的技能。"
+  }
+}
