@@ -1035,29 +1035,31 @@ window.__ModuleLoader__.load({
      * Composer glyph: four-point invocation sparkle, a small plus, and a brand
      * accent dot — stroked in currentColor so it inherits the pill's state tone.
      */
-    function IconInvoke({ className }) {
+    function IconSkill({ className }) {
+      // Artwork adapted from DSH ui-primitives `IconSkillOutline` (MIT): the
+      // same document + sparkle glyph used by the Settings nav row, drawn with
+      // currentColor and the host's 1.3px medium stroke so the composer trigger
+      // reads as part of the host's permission/model control family.
       return h('svg', {
-        viewBox: '0 0 16 16',
-        width: 16,
-        height: 16,
+        viewBox: '0 0 17 17',
+        width: 14,
+        height: 14,
         fill: 'none',
+        strokeWidth: 1.3,
         'aria-hidden': 'true',
         focusable: 'false',
         className,
       },
+        h('path', { d: 'M4.57788 5.77124H10.7029', stroke: 'currentColor' }),
+        h('path', { d: 'M4.57788 8.89819H7.91879', stroke: 'currentColor' }),
         h('path', {
-          d: 'M6.3 2.1c.34 2.2 1.26 3.12 3.46 3.46-2.2.34-3.12 1.26-3.46 3.46-.34-2.2-1.26-3.12-3.46-3.46 2.2-.34 3.12-1.26 3.46-3.46Z',
-          stroke: 'currentColor',
-          strokeWidth: 1.25,
-          strokeLinejoin: 'round',
+          d: 'M12.1404 1.19446C12.9442 1.19446 13.6404 1.81999 13.6404 2.64465V8.89856H12.6404V2.64465C12.6404 2.42015 12.4411 2.19446 12.1404 2.19446H3.14038C2.83968 2.19446 2.64038 2.42015 2.64038 2.64465V13.0929C2.64082 13.3172 2.84001 13.5421 3.14038 13.5421H8.88159V14.5421H3.14038C2.33675 14.5421 1.6408 13.9172 1.64038 13.0929V2.64465C1.64038 1.81999 2.33651 1.19446 3.14038 1.19446H12.1404Z',
+          fill: 'currentColor',
         }),
         h('path', {
-          d: 'M11.35 8.9v3.5M9.6 10.65h3.5',
+          d: 'M12.0051 15.1056C12.0051 13.6395 10.8166 12.451 9.35059 12.451C10.8166 12.451 12.0051 11.2626 12.0051 9.79651C12.0051 11.2626 13.1936 12.451 14.6597 12.451C13.1936 12.451 12.0051 13.6395 12.0051 15.1056Z',
           stroke: 'currentColor',
-          strokeWidth: 1.4,
-          strokeLinecap: 'round',
         }),
-        h('circle', { cx: 12.9, cy: 4.6, r: 1.05, fill: 'var(--dsw-alias-brand-primary)' }),
       )
     }
 
@@ -1666,52 +1668,45 @@ window.__ModuleLoader__.load({
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
+  max-width: 220px;
   height: 28px;
-  padding: 0 10px 0 9px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 999px;
-  background: var(--dsw-alias-bg-layer-1);
+  padding: 0 4px 0 8px;
+  border: none;
+  border-radius: var(--dsw-radius-sm);
+  outline: none;
+  background: transparent;
   color: var(--dsw-alias-label-secondary);
   font-family: inherit;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 13px;
+  line-height: 20px;
   font-weight: 500;
   cursor: pointer;
 }
-.dshskill-selTrigger:hover:not(:disabled) {
-  border-color: var(--dsw-alias-border-l2);
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-}
-.dshskill-selTrigger[aria-expanded='true'] {
-  border-color: var(--dsw-alias-brand-primary);
-  background: color-mix(in srgb, var(--dsw-alias-brand-primary) 8%, var(--dsw-alias-bg-layer-1));
-  color: var(--dsw-alias-label-primary);
-}
+.dshskill-selTrigger:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
 .dshskill-selTrigger:focus-visible {
-  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
-  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
 }
-.dshskill-selTrigger:disabled { opacity: 0.5; cursor: default; }
-.dshskill-selIcon {
-  flex: none;
-  width: 15px;
-  height: 15px;
-  color: var(--dsw-alias-label-caption);
-  transition: color 120ms ease;
-}
-.dshskill-selTrigger:hover:not(:disabled) .dshskill-selIcon { color: var(--dsw-alias-label-secondary); }
-.dshskill-selTrigger[aria-expanded='true'] .dshskill-selIcon { color: var(--dsw-alias-brand-primary); }
+.dshskill-selTrigger:disabled { color: var(--dsw-alias-label-dimmed); cursor: default; }
+.dshskill-selIcon { display: inline-flex; flex: 0 0 auto; width: 14px; height: 14px; }
 .dshskill-selLabel { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dshskill-selChevron {
-  flex: none;
-  width: 11px;
-  height: 11px;
+  /* inline-flex, not inline: an inline seat reserves baseline descent under the
+     svg and floats the glyph off-center in the 28px trigger. */
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
   color: var(--dsw-alias-label-caption);
-  transition: transform 140ms ease;
+  transition: transform 120ms ease;
 }
-.dshskill-selTrigger[aria-expanded='true'] .dshskill-selChevron { color: var(--dsw-alias-label-secondary); }
+
+/* Narrow composer: the label collapses while the glyph stays, exactly like the
+   permission / model triggers. */
+@container (max-width: 460px) {
+  .dshskill-selTrigger:has(.dshskill-selIcon) .dshskill-selLabel { display: none; }
+}
 
 .dshskill-pop {
   position: absolute;
@@ -1904,7 +1899,7 @@ window.__ModuleLoader__.load({
 
 @media (prefers-reduced-motion: reduce) {
   .dshskill-switchThumb, .dshskill-skillChevron, .dshskill-selChevron,
-  .dshskill-selIcon, .dshskill-invokePlus, .dshskill-addChevron { transition: none; }
+  .dshskill-invokePlus, .dshskill-addChevron { transition: none; }
   .dshskill-skeletonRow, .dshskill-spinner { animation: none; }
 }
 `
@@ -3472,7 +3467,7 @@ window.__ModuleLoader__.load({
           'aria-busy': fetching ? 'true' : undefined,
           onClick: togglePopover,
         },
-          h(IconInvoke, { className: 'dshskill-selIcon' }),
+          h(IconSkill, { className: 'dshskill-selIcon' }),
           h('span', { className: 'dshskill-selLabel' }, t('invoke.label')),
           h(IconChevronDown, { className: classNames('dshskill-selChevron', open ? 'dshskill-open' : '') }),
         ),

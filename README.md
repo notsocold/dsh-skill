@@ -182,6 +182,44 @@ client.js          浏览器半：设置页 + 技能显式调用按钮（React�
 > 说明：本环境没有浏览器自动化能力，页面视觉效果（主题、排版、弹层位置）未做截图级验证；
 > 槽位注册与客户端 bundle 热加载已在运行页面内核确认。
 
+## 在其他机器上部署与兼容性
+
+插件是**零依赖纯 JS bundle**，代码目录约 720 KB（`pnpm pack` 后约 85 KB），无需 `pnpm install`
+或构建。跨机器部署分三部分：
+
+1. **插件代码**：`git clone` 或拷贝目录到新机器任意位置，在 Settings → Plugins → Add plugin 中
+   填**绝对路径**安装并启用（安装后 profile 记录 `link:<绝对路径>`，请勿移动该目录）。
+2. **技能数据（可选）**：`~/.dsh/dsh-skill/` 保存托管技能与配置；拷贝该目录可迁移“你导入/新建的
+   技能 + 来源启停偏好”。Claude/Codex 生态技能建议在新机器安装对应生态目录，插件会自动发现；
+   项目级技能随项目 git 走（`<项目>/.claude/skills`、`.codex/skills`），无需迁移。
+3. **宿主补丁（可选，仅源码版 DSH）**：设置左侧导航图标需要应用
+   `host-patches/0001-settings-nav-skill-icon.patch` 并重新 bundle；打包版 DSH 无法打该补丁，
+   导航图标回退为默认齿轮，**其余功能不受影响**。
+
+兼容性矩阵（当前版本 `0.1.0`）：
+
+| 环境 | 支持情况 | 说明 |
+|---|---|---|
+| DSH 0.2.1-rc.2 Web profile（`dsh web` / `npx @deepseek-ai/dsh web`） | ✅ 完整功能（已实测） | 需 Node `^22.19` 或 `>=24` |
+| DSH Desktop（web-surface profile） | ✅ 功能可用 | 需安装到对应 profile；宿主补丁通常不可用 |
+| 其他 DSH 版本 | ⚠️ 不保证 | 开发者预览期 API/slot 可能变动；升级后需回归验证 |
+| headless / SDK / ACP profile | ❌ 插件不激活 | 依赖 `connection`、`tools` 与 Web 客户端槽位 |
+| 无 `uiWorkspace.listDirectory` 的极简组合 | ⚠️ 降级 | 文件夹选择退化为手动输入绝对路径 |
+
+**功能随代码走**（无需宿主补丁）：技能发现/导入/新建/删除、来源与全局启停、项目级自动发现、
+`/技能名` 显式调用、Claude/Codex 兼容前言、`skill_library` 工具、HTTP API、插件清单图标、
+弹层/按钮视觉等。
+**不随代码走**：你的技能内容与启停偏好（在 `~/.dsh/dsh-skill/`）、新机器上的 Claude/Codex 生态
+目录、设置导航图标（宿主 patch）。
+
+安装后自检（目录拷贝/git clone 含 `test/`）：
+
+```bash
+cd <插件目录>
+node --check index.js client.js lib/*.js
+node --test test/*.test.js     # 期望 64 passed
+```
+
 ## 设置导航图标（宿主侧小改动）
 
 DSH 设置面板左侧每个 section 的图标由宿主 `ui-settings-general` 的
